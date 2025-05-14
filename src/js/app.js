@@ -3,34 +3,173 @@ App = {
   contracts: {},
   account: '0x0',
   hasVoted: false,
+  isConnected: false,
+  candidatesData: [], // Store candidates data to avoid redundant fetching
 
   init: async function() {
     return await App.initWeb3();
   },
 
   initWeb3: async function() {
+    // Check if user was previously connected
+    const previouslyConnected = localStorage.getItem('walletConnected') === 'true';
+
+    // First check if we have injected web3 (Mist/MetaMask)
     if (typeof window.ethereum !== 'undefined') {
-      try {
-        // Request account access
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        App.web3Provider = window.ethereum;
-        web3 = new Web3(window.ethereum);
-        App.account = accounts[0];
+      App.web3Provider = window.ethereum;
+      web3 = new Web3(window.ethereum);
+      
+      // If previously connected, try to reconnect automatically
+      if (previouslyConnected) {
+        try {
+          const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+          if (accounts.length > 0) {
+            App.account = accounts[0];
+            App.isConnected = true;
+            localStorage.setItem('walletConnected', 'true');
+            
+            // Update UI to show connected state
+            App.updateConnectionUI(true);
+          } else {
+            App.isConnected = false;
+            localStorage.removeItem('walletConnected');
+            App.updateConnectionUI(false);
+            
+            // Show wallet prompt if not reconnected automatically
+            setTimeout(App.showWalletPrompt, 1000);
+          }
+        } catch (error) {
+          console.error("Error reconnecting to wallet", error);
+          App.isConnected = false;
+          localStorage.removeItem('walletConnected');
+          App.updateConnectionUI(false);
+          
+          // Show wallet prompt if reconnect failed
+          setTimeout(App.showWalletPrompt, 1000);
+        }
+      } else {
+        App.updateConnectionUI(false);
         
-        // Listen for account changes
-        window.ethereum.on('accountsChanged', function (accounts) {
-          App.account = accounts[0];
-          App.render();
-        });
-      } catch (error) {
-        console.error("User denied account access");
+        // Show wallet prompt for new users
+        setTimeout(App.showWalletPrompt, 1000);
       }
+      
+      // Listen for account changes
+      window.ethereum.on('accountsChanged', function (accounts) {
+        if (accounts.length === 0) {
+          // User disconnected wallet
+          App.disconnectWallet();
+        } else {
+          App.account = accounts[0];
+          App.loadBlockchainData();
+        }
+      });
     } else {
-      console.log('No ethereum browser detected. You should consider trying MetaMask!');
+      // If no injected web3 instance is detected, fall back to Ganache
       App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
       web3 = new Web3(App.web3Provider);
+      
+      // This is read-only mode
+      App.isConnected = false;
+      App.updateConnectionUI(false);
+      
+      // Show a message that MetaMask is recommended
+      $("#systemStatus").html("Read-only mode. Install MetaMask for full functionality");
+      
+      // Show MetaMask installation prompt
+      setTimeout(App.showMetaMaskPrompt, 1000);
     }
+    
     return App.initContract();
+  },
+  
+  // Show wallet connection prompt
+  showWalletPrompt: function() {
+    if (!App.isConnected) {
+      // Create modal if it doesn't exist
+      if ($('#walletPromptModal').length === 0) {
+        $('body').append(`
+          <div class="modal fade" id="walletPromptModal" tabindex="-1" role="dialog" aria-labelledby="walletPromptModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                  <h5 class="modal-title" id="walletPromptModalLabel">Connect Your Wallet</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="text-center mb-4">
+                    <i class="fas fa-wallet fa-3x text-primary mb-3"></i>
+                    <p>Connect your wallet to participate in the voting process. Your wallet is required to:</p>
+                    <ul class="text-left">
+                      <li>Verify your identity on the blockchain</li>
+                      <li>Cast your vote securely</li>
+                      <li>Ensure you can only vote once</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Maybe Later</button>
+                  <button type="button" class="btn btn-primary" id="modalConnectWalletBtn">
+                    <i class="fas fa-wallet"></i> Connect Wallet
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `);
+        
+        // Add click handler to the modal connect button
+        $('#modalConnectWalletBtn').on('click', function() {
+          $('#walletPromptModal').modal('hide');
+          App.connectWallet();
+        });
+      }
+      
+      // Show the modal
+      $('#walletPromptModal').modal('show');
+    }
+  },
+  
+  // Show MetaMask installation prompt
+  showMetaMaskPrompt: function() {
+    if ($('#metaMaskPromptModal').length === 0) {
+      $('body').append(`
+        <div class="modal fade" id="metaMaskPromptModal" tabindex="-1" role="dialog" aria-labelledby="metaMaskPromptModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="metaMaskPromptModalLabel">Install MetaMask</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="text-center mb-4">
+                  <img src="https://metamask.io/images/metamask-fox.svg" alt="MetaMask Logo" style="width: 80px; margin-bottom: 20px;">
+                  <p>MetaMask is required to participate in the voting process. Please install MetaMask to:</p>
+                  <ul class="text-left">
+                    <li>Create a secure blockchain wallet</li>
+                    <li>Connect to the blockchain network</li>
+                    <li>Cast your vote securely</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Continue in Read-only Mode</button>
+                <a href="https://metamask.io/download/" target="_blank" class="btn btn-primary">
+                  <i class="fas fa-download"></i> Install MetaMask
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      `);
+    }
+    
+    // Show the modal
+    $('#metaMaskPromptModal').modal('show');
   },
 
   initContract: function() {
@@ -40,87 +179,245 @@ App = {
       // Connect provider to interact with contract
       App.contracts.Election.setProvider(App.web3Provider);
 
+      // Set up event listeners once
       App.listenForEvents();
-
-      return App.render();
+      
+      // Initial render
+      return App.loadBlockchainData();
     });
   },
 
   listenForEvents: function() {
     App.contracts.Election.deployed().then(function(instance) {
-      // Restart Chrome if you are unable to receive this event
-      // This is a known issue with MetaMask
+      // Listen only for new events, not historical ones
       instance.votedEvent({}, {
-        fromBlock: 0,
+        fromBlock: 'latest',
         toBlock: 'latest'
       }).watch(function(error, event) {
-        console.log("event triggered", event)
-        // Reload when a new vote is recorded
-        App.render();
+        if (error) {
+          console.error("Error in event listener:", error);
+          return;
+        }
+        
+        console.log("Vote event received:", event);
+        // Only update the specific candidate that was voted for
+        const candidateId = event.args._candidateId.toNumber();
+        App.updateCandidateVote(candidateId);
       });
-    });
+    }).catch(console.error);
   },
 
-  render: function() {
-    var electionInstance;
+  // Function to update only a specific candidate's vote count
+  updateCandidateVote: function(candidateId) {
+    App.contracts.Election.deployed().then(async function(instance) {
+      try {
+        // Fetch the updated candidate data
+        const candidate = await instance.candidates(candidateId);
+        
+        // Find the candidate in our local data and update it
+        for (let i = 0; i < App.candidatesData.length; i++) {
+          if (App.candidatesData[i][0].toNumber() === candidateId) {
+            App.candidatesData[i] = candidate;
+            break;
+          }
+        }
+        
+        // Recalculate total votes
+        let totalVotes = 0;
+        App.candidatesData.forEach(function(candidate) {
+          totalVotes += parseInt(candidate[2]);
+        });
+        
+        // Update only the necessary UI elements
+        $("#totalVotes").text(totalVotes.toString());
+        
+        // Update the specific candidate row
+        const voteCount = candidate[2].toString();
+        const percentage = totalVotes > 0 ? (voteCount / totalVotes * 100).toFixed(1) + '%' : '0%';
+        
+        $(`#candidate-${candidateId} .vote-count`).text(voteCount);
+        $(`#candidate-${candidateId} .vote-percentage`).text(percentage);
+        
+        // Update all percentages since total votes changed
+        App.candidatesData.forEach(function(candidate) {
+          const id = candidate[0].toNumber();
+          const votes = parseInt(candidate[2]);
+          const pct = totalVotes > 0 ? (votes / totalVotes * 100).toFixed(1) + '%' : '0%';
+          $(`#candidate-${id} .vote-percentage`).text(pct);
+        });
+        
+        // Update chart visualization
+        App.renderChart(App.candidatesData, totalVotes);
+        
+        // Check if current user has voted (if connected)
+        if (App.isConnected) {
+          const hasVoted = await instance.voters(App.account);
+          if (hasVoted) {
+            $("#voteForm").hide();
+            $("#voteMessage").html("<div class='alert alert-info'>You have already voted!</div>");
+          }
+        }
+        
+      } catch (error) {
+        console.error("Error updating candidate vote:", error);
+      }
+    }).catch(console.error);
+  },
+
+  // Separate data loading from UI rendering
+  loadBlockchainData: function() {
     var loader = $("#loader");
     var content = $("#content");
 
     loader.show();
     content.hide();
 
-    // Load account data
-    if (App.account) {
+    // Load account data if connected
+    if (App.isConnected) {
       $("#accountAddress").html("Your Account: " + App.account);
     }
 
-    // Load contract data
-    App.contracts.Election.deployed().then(function(instance) {
-      electionInstance = instance;
-      return electionInstance.candidatesCount();
-    }).then(function(candidatesCount) {
-      var candidatesResults = $("#candidatesResults");
-      candidatesResults.empty();
-
-      var candidatesSelect = $('#candidatesSelect');
-      candidatesSelect.empty();
-
-      var promises = [];
-      for (var i = 1; i <= candidatesCount; i++) {
-        promises.push(electionInstance.candidates(i));
-      }
-
-      Promise.all(promises).then(function(candidates) {
-        candidates.forEach(function(candidate) {
-          var id = candidate[0];
-          var name = candidate[1];
-          var voteCount = candidate[2];
-
-          // Render candidate Result
-          var candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>";
-          candidatesResults.append(candidateTemplate);
-
-          // Render candidate ballot option
-          var candidateOption = "<option value='" + id + "'>" + name + "</option>";
-          candidatesSelect.append(candidateOption);
-        });
-        return electionInstance.voters(App.account);
-      }).then(function(hasVoted) {
-        // Do not allow a user to vote
-        if(hasVoted) {
-          $('form').hide();
-          $("#voteMessage").html("<div class='alert alert-info'>You have already voted!</div>");
+    App.contracts.Election.deployed().then(async function(instance) {
+      const electionInstance = instance;
+      
+      try {
+        // Get candidate count
+        const candidatesCount = await electionInstance.candidatesCount();
+        $("#candidateCount").text(candidatesCount.toString());
+        
+        // Fetch all candidates
+        let promises = [];
+        for (let i = 1; i <= candidatesCount; i++) {
+          promises.push(electionInstance.candidates(i));
         }
+        
+        // Store candidates data for future reference
+        App.candidatesData = await Promise.all(promises);
+        
+        // Render the UI with the data
+        App.renderUI();
+        
+        // Check if user has already voted (if connected)
+        if (App.isConnected) {
+          const hasVoted = await electionInstance.voters(App.account);
+          App.hasVoted = hasVoted;
+          
+          if (hasVoted) {
+            $("#voteForm").hide();
+            $("#voteMessage").html("<div class='alert alert-info'>You have already voted!</div>");
+          } else {
+            $("#voteForm").show();
+            $("#voteMessage").html("");
+          }
+        } else {
+          // Show connection required message if not connected
+          $("#voteForm").hide();
+          $("#voteMessage").html("<div class='alert alert-warning'>Connect your wallet to vote</div>");
+        }
+        
+      } catch (error) {
+        console.error("Error loading blockchain data:", error);
+        $("#error").html("Error loading election data: " + error.message);
+        $("#error").show();
+      } finally {
         loader.hide();
         content.show();
-      });
+      }
     }).catch(function(error) {
-      console.warn(error);
+      console.error("Contract deployment error:", error);
+      $("#error").html("Error connecting to the blockchain: " + error.message);
+      $("#error").show();
       loader.hide();
     });
   },
 
+  // Function to render UI elements from stored data
+  renderUI: function() {
+    // Clear existing UI elements
+    const candidatesResults = $("#candidatesResults");
+    const candidatesSelect = $('#candidatesSelect');
+    const chartDiv = $("#resultsChart");
+    
+    candidatesResults.empty();
+    candidatesSelect.empty();
+    chartDiv.empty();
+    
+    // Add default option to select
+    candidatesSelect.append("<option selected disabled value=''>Choose a candidate...</option>");
+    
+    // Calculate total votes
+    let totalVotes = 0;
+    App.candidatesData.forEach(function(candidate) {
+      totalVotes += parseInt(candidate[2]);
+    });
+    
+    // Update total votes in UI
+    $("#totalVotes").text(totalVotes.toString());
+    
+    // Process each candidate
+    App.candidatesData.forEach(function(candidate) {
+      const id = candidate[0].toNumber();
+      const name = candidate[1];
+      const voteCount = candidate[2].toString();
+      
+      // Calculate percentage for display
+      const percentage = totalVotes > 0 ? (voteCount / totalVotes * 100).toFixed(1) + '%' : '0%';
+
+      // Render candidate Result - with unique ID for easy updates
+      const candidateTemplate = `<tr id="candidate-${id}">
+        <th>${id}</th>
+        <td>${name}</td>
+        <td class="vote-count">${voteCount}</td>
+        <td class="vote-percentage">${percentage}</td>
+      </tr>`;
+      candidatesResults.append(candidateTemplate);
+
+      // Render candidate ballot option
+      const candidateOption = `<option value="${id}">${name}</option>`;
+      candidatesSelect.append(candidateOption);
+    });
+    
+    // Render chart visualization
+    App.renderChart(App.candidatesData, totalVotes);
+  },
+
+  // Render a simple bar chart for vote visualization
+  renderChart: function(candidates, totalVotes) {
+    const chartDiv = $("#resultsChart");
+    chartDiv.empty();
+    
+    candidates.forEach(function(candidate) {
+      const name = candidate[1];
+      const votes = parseInt(candidate[2]);
+      const percentage = totalVotes > 0 ? (votes / totalVotes * 100) : 0;
+      
+      // Create a bar with the height based on percentage
+      const bar = $("<div></div>")
+        .addClass("chart-bar")
+        .css("height", Math.max(percentage, 2) + "%")
+        .attr("data-percentage", percentage.toFixed(1) + "%");
+      
+      // Add label below the bar
+      const label = $("<div></div>")
+        .addClass("chart-label")
+        .text(name);
+      
+      // Wrap bar and label in a container
+      const barContainer = $("<div></div>")
+        .addClass("chart-bar-container")
+        .append(bar)
+        .append(label);
+      
+      chartDiv.append(barContainer);
+    });
+  },
+
   castVote: function() {
+    if (!App.isConnected) {
+      $("#voteMessage").html("<div class='alert alert-warning'>Please connect your wallet first</div>");
+      return;
+    }
+    
     var candidateId = $('#candidatesSelect').val();
     if (!candidateId) {
       $("#voteMessage").html("<div class='alert alert-danger'>Please select a candidate!</div>");
@@ -130,21 +427,165 @@ App = {
     $("#voteButton").prop('disabled', true);
     $("#voteMessage").html("<div class='alert alert-info'>Processing your vote... Please wait.</div>");
 
+    // Single transaction
     App.contracts.Election.deployed().then(function(instance) {
       return instance.vote(candidateId, { from: App.account });
     }).then(function(result) {
-      $("#voteMessage").html("<div class='alert alert-success'>Your vote has been recorded!</div>");
-      $("#content").hide();
-      $("#loader").show();
+      console.log("Vote transaction successful", result);
+      $("#voteMessage").html("<div class='alert alert-success'>Your vote has been recorded! Your wallet will be disconnected in 5 seconds.</div>");
+      $("#voteForm").hide();
+      
+      // Mark user as having voted
+      App.hasVoted = true;
+      
+      // Disconnect wallet after successful vote with countdown
+      let countdown = 5;
+      const countdownInterval = setInterval(function() {
+        countdown--;
+        $("#voteMessage").html("<div class='alert alert-success'>Your vote has been recorded! Your wallet will be disconnected in " + countdown + " seconds.</div>");
+        
+        if (countdown <= 0) {
+          clearInterval(countdownInterval);
+          App.disconnectWallet();
+        }
+      }, 1000);
+      
     }).catch(function(err) {
+      console.error("Error in vote transaction", err);
       $("#voteButton").prop('disabled', false);
       if (err.message.includes("revert")) {
         $("#voteMessage").html("<div class='alert alert-danger'>You have already voted!</div>");
       } else {
         $("#voteMessage").html("<div class='alert alert-danger'>Error processing your vote. Please try again.</div>");
       }
-      console.error(err);
     });
+  },
+
+  // Function to connect wallet
+  connectWallet: async function() {
+    if (typeof window.ethereum !== 'undefined') {
+      $("#connectWalletBtn").prop('disabled', true);
+      $("#connectWalletBtn").html('<i class="fas fa-spinner fa-spin"></i> Connecting...');
+      
+      try {
+        // Request account access
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        App.account = accounts[0];
+        App.isConnected = true;
+        
+        // Store connection status
+        localStorage.setItem('walletConnected', 'true');
+        
+        // Update UI
+        App.updateConnectionUI(true);
+        
+        // Use loadBlockchainData instead of render
+        App.loadBlockchainData();
+        
+      } catch (error) {
+        console.error("User denied account access", error);
+        $("#connectWalletError").html("Please allow access to your MetaMask wallet.");
+        $("#connectWalletBtn").prop('disabled', false);
+        $("#connectWalletBtn").html('<i class="fas fa-wallet"></i> Connect Wallet');
+      }
+    } else {
+      $("#connectWalletError").html("Please install MetaMask to use all features.");
+    }
+  },
+
+  // Function to disconnect wallet from site
+  disconnectWallet: function() {
+    // Clear account info and connection status
+    App.account = '0x0';
+    App.isConnected = false;
+    localStorage.removeItem('walletConnected');
+    
+    // Update UI
+    App.updateConnectionUI(false);
+    
+    console.log("Wallet disconnected from site");
+
+    // Show a disconnection notification
+    App.showDisconnectNotification();
+    
+    // Use loadBlockchainData instead of render
+    App.loadBlockchainData();
+  },
+
+  // Show wallet disconnect notification
+  showDisconnectNotification: function() {
+    // Create modal if it doesn't exist
+    if ($('#walletDisconnectedModal').length === 0) {
+      $('body').append(`
+        <div class="modal fade" id="walletDisconnectedModal" tabindex="-1" role="dialog" aria-labelledby="walletDisconnectedModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="walletDisconnectedModalLabel">
+                  <i class="fas fa-unlink mr-2"></i> Wallet Disconnected
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="text-center mb-4">
+                  <i class="fas fa-unlink fa-3x text-dark mb-3"></i>
+                  <p>Your wallet has been disconnected from this application.</p>
+                  <p><strong>Note:</strong> This does not lock your MetaMask wallet. To lock MetaMask, you need to:</p>
+                  <ol class="text-left">
+                    <li>Click on the MetaMask icon in your browser</li>
+                    <li>Click on the account icon in the top-right corner</li>
+                    <li>Select "Lock" from the dropdown menu</li>
+                  </ol>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="modalReconnectWalletBtn">
+                  <i class="fas fa-link"></i> Reconnect Wallet
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `);
+      
+      // Add click handler to the modal reconnect button
+      $('#modalReconnectWalletBtn').on('click', function() {
+        $('#walletDisconnectedModal').modal('hide');
+        App.connectWallet();
+      });
+    }
+    
+    // Show the modal
+    $('#walletDisconnectedModal').modal('show');
+  },
+
+  // Update UI based on connection state
+  updateConnectionUI: function(isConnected) {
+    if (isConnected) {
+      $("#walletSection").hide();
+      $("#accountSection").show();
+      $("#connectWalletError").html("");
+      $("#accountAddress").html("Your Account: " + App.account);
+      
+      // Update system status
+      $("#systemStatus").html("Connected to Blockchain");
+      
+      // Show voting section if connected
+      $("#votingActions").show();
+    } else {
+      $("#walletSection").show();
+      $("#accountSection").hide();
+      $("#accountAddress").html("");
+      
+      // Update system status for read-only mode
+      $("#systemStatus").html("Read-only mode. Connect wallet for full functionality");
+      
+      // Hide voting section if not connected
+      $("#votingActions").hide();
+    }
   }
 };
 
@@ -178,21 +619,12 @@ $(function() {
     window.matchMedia('(prefers-color-scheme: dark)').addListener(handleOSThemeChange);
 
     // Add click handlers
-    $('#connectWalletBtn').on('click', async function() {
-      if (typeof window.ethereum !== 'undefined') {
-        try {
-          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-          App.account = accounts[0];
-          $("#walletSection").hide();
-          $("#accountSection").show();
-          App.render();
-        } catch (error) {
-          console.error("User denied account access");
-          $("#connectWalletError").html("Please allow access to your MetaMask wallet.");
-        }
-      } else {
-        $("#connectWalletError").html("Please install MetaMask to use this application.");
-      }
+    $('#connectWalletBtn').on('click', function() {
+      App.connectWallet();
+    });
+
+    $('#disconnectWalletBtn').on('click', function() {
+      App.disconnectWallet();
     });
 
     $('#voteButton').on('click', function() {

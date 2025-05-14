@@ -459,8 +459,8 @@ button {
 
 #connectWalletError {
   color: var(--error-color);
-  font-size: 0.9rem;
-  margin-top: var(--spacing-xs);
+  font-size: 0.8rem;
+  margin-top: 5px;
 }
 
 /* Results visualization */
@@ -468,6 +468,75 @@ button {
   padding: var(--spacing-md);
   background-color: var(--gray-light);
   border-radius: var(--border-radius-md);
+  margin-top: 2rem;
+}
+
+#resultsChart {
+  min-height: 200px;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) 0;
+  height: 200px;
+  align-items: flex-end;
+  gap: 10px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid var(--gray-medium);
+  padding-bottom: 20px;
+}
+
+.chart-bar {
+  flex: 1;
+  background: linear-gradient(to top, var(--primary-color), var(--primary-dark));
+  border-radius: var(--border-radius-sm) var(--border-radius-sm) 0 0;
+  position: relative;
+  transition: height var(--transition-normal);
+  min-width: 2rem;
+  text-align: center;
+  width: 100%;
+  background-color: var(--primary-color);
+  border-radius: 4px 4px 0 0;
+  position: relative;
+  transition: height 0.5s ease;
+}
+
+.chart-bar::after {
+  content: attr(data-percentage);
+  position: absolute;
+  top: -25px;
+  left: 0;
+  right: 0;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.chart-bar::before {
+  content: attr(data-percentage);
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.chart-bar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.chart-label {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Footer */
@@ -608,6 +677,13 @@ html {
   align-items: flex-end;
   gap: var(--spacing-sm);
   padding: var(--spacing-md) 0;
+  height: 200px;
+  align-items: flex-end;
+  gap: 10px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid var(--gray-medium);
+  padding-bottom: 20px;
 }
 
 .chart-bar {
@@ -618,6 +694,11 @@ html {
   transition: height var(--transition-normal);
   min-width: 2rem;
   text-align: center;
+  width: 100%;
+  background-color: var(--primary-color);
+  border-radius: 4px 4px 0 0;
+  position: relative;
+  transition: height 0.5s ease;
 }
 
 .chart-bar::after {
@@ -628,6 +709,34 @@ html {
   right: 0;
   font-size: 0.8rem;
   font-weight: bold;
+}
+
+.chart-bar::before {
+  content: attr(data-percentage);
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.chart-bar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.chart-label {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Theme Toggle Buttons */
@@ -692,4 +801,80 @@ html {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Wallet connection UI */
+#walletSection, #accountSection {
+  display: flex;
+  align-items: center;
+}
+
+#connectWalletBtn, #accountDropdown {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  gap: 8px;
+}
+
+#connectWalletError {
+  color: var(--error-color);
+  font-size: 0.8rem;
+  margin-top: 5px;
+}
+
+/* Registration status */
+#registrationStatus, #eligibilityStatus {
+  margin-bottom: 1rem;
+}
+
+/* Results chart */
+.results-visualization {
+  margin-top: 2rem;
+}
+
+#resultsChart {
+  display: flex;
+  height: 200px;
+  align-items: flex-end;
+  gap: 10px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid var(--gray-medium);
+  padding-bottom: 20px;
+}
+
+.chart-bar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.chart-bar {
+  width: 100%;
+  background-color: var(--primary-color);
+  border-radius: 4px 4px 0 0;
+  position: relative;
+  transition: height 0.5s ease;
+}
+
+.chart-bar::before {
+  content: attr(data-percentage);
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.chart-label {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

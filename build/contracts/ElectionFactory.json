@@ -11095,7 +11095,7 @@
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2025-05-14T14:25:34.551Z",
+  "updatedAt": "2025-05-14T18:29:38.059Z",
   "devdoc": {
     "details": "Factory contract for creating and managing multiple elections",
     "kind": "dev",
