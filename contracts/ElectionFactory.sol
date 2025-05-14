@@ -83,20 +83,21 @@ contract ElectionFactory {
      * @return Address of the newly created election
      */
     function createElection(string memory _name, string memory _description) public onlyManager returns (address) {
-        Election newElection = new Election(_name, _description);
-        
+        // Create a new election without arguments
+        Election newElection = new Election();
+
         ElectionInfo memory info = ElectionInfo({
             electionAddress: address(newElection),
-            name: _name,
-            description: _description,
+            name: _name, // Store the name separately
+            description: _description, // Store the description separately
             owner: msg.sender,
             creationTime: block.timestamp,
             isActive: true
         });
-        
+
         elections.push(info);
         registeredElections[address(newElection)] = true;
-        
+
         emit ElectionCreated(address(newElection), _name, msg.sender);
         return address(newElection);
     }

@@ -9604,12 +9604,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x3d9942Bde2c11B09B3FbA60fC3aFa7EC123d57e3",
-      "transactionHash": "0x24546259d2dc44107d7fee20cdf952b7b10c7184162b7cacb53f1444803e99e1"
+      "address": "0xdb2CA63F6b76643B1217cAf39F861c67737a07A6",
+      "transactionHash": "0x99bc46e6ed95e54f56631bdf0b2bd61b59b5b786ad01b6e8c1e757918132e7fb"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2025-05-13T14:36:02.767Z",
+  "updatedAt": "2025-05-14T13:20:59.616Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "Manages voter registration, identity verification, and eligibility ",
