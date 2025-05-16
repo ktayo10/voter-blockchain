@@ -53,30 +53,107 @@
   --line-height: 1.7;
   --letter-spacing: 0.03em;
   --word-spacing: 0.16em;
+
+  /* Standard Mode Variables */
+  --bg-standard: #F5F7FA;
+  --card-standard: #FFFFFF;
+  --primary-standard: #4A89DC;
+  --secondary-standard: #3867D6;
+  --text-primary-standard: #2D3748;
+  --text-secondary-standard: #5A6887;
+  --table-bg-standard: #F9FAFC;
+  --table-header-standard: #EEF2F7;
+  --table-border-standard: #E4E9F2;
+
+  /* Dark Mode Variables */
+  --bg-dark: #1E2330;
+  --card-dark: #FFFFFF;
+  --primary-dark: #4A89DC;
+  --secondary-dark: #333333;
+  --text-primary-dark: #E0E6F2;
+  --text-secondary-dark: #CBD5E0;
+  --table-bg-dark: #2C3444;
+  --table-cell-dark: #373F51;
+  --table-border-dark: #4A5568;
+
+  /* Color Blind Variables */
+  --bg-colorblind: #F8F9FA;
+  --card-colorblind: #FFFFFF;
+  --primary-colorblind: #0072B2;
+  --secondary-colorblind: #004C6D;
+  --text-primary-colorblind: #333333;
+  --text-secondary-colorblind: #555555;
+  --table-bg-colorblind: #F0F0F0;
+  --table-header-colorblind: #E6F2F7;
+  --table-border-colorblind: #CCCCCC;
+
+  /* Dyslexia-Friendly Variables */
+  --bg-dyslexic: #F2F2E8;
+  --card-dyslexic: #F8F5F0;
+  --primary-dyslexic: #8BABDE;
+  --secondary-dyslexic: #8BABDE;
+  --text-primary-dyslexic: #333333;
+  --text-secondary-dyslexic: #444444;
+  --table-bg-dyslexic: #F8F5F0;
+  --table-header-dyslexic: #D7E2F5;
+  --table-border-dyslexic: #E5E9F2;
+
+  /* Initial theme (dark mode) */
+  --bg: var(--bg-dark);
+  --card: var(--card-dark);
+  --primary: var(--primary-dark);
+  --secondary: var(--secondary-dark);
+  --text-primary: var(--text-primary-dark);
+  --text-secondary: var(--text-secondary-dark);
+  --table-bg: var(--table-bg-dark);
+  --table-cell: var(--table-cell-dark);
+  --table-border: var(--table-border-dark);
+
+  /* Typography */
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --letter-spacing: normal;
+  --line-height: 1.5;
 }
 
 /* Dark Mode Colors */
 [data-theme="dark"] {
-  --primary-color: #4d9fff;
-  --primary-dark: #66b3ff;
-  --background-light: #121212;
-  --text-dark: #ffffff;
-  --text-light: #121212;
-  --gray-light: #2d2d2d;
-  --gray-medium: #999999;
-  --gray-dark: #cccccc;
+  --bg: var(--bg-dark);
+  --card: var(--card-dark);
+  --primary: var(--primary-dark);
+  --secondary: var(--secondary-dark);
+  --text-primary: var(--text-primary-dark);
+  --text-secondary: var(--text-secondary-dark);
+  --table-bg: var(--table-bg-dark);
+  --table-cell: var(--table-cell-dark);
+  --table-border: var(--table-border-dark);
 }
 
 /* Color Blind Mode - Using safe color combinations */
 [data-theme="colorblind"] {
-  --primary-color: #0077bb;
-  --primary-dark: #005588;
-  --secondary-color: #ee7733;
-  --secondary-dark: #cc5522;
-  --error-color: #ee3333;
-  --success-color: #009988;
-  --warning-color: #ee7733;
-  --info-color: #0077bb;
+  --bg: var(--bg-colorblind);
+  --card: var(--card-colorblind);
+  --primary: var(--primary-colorblind);
+  --secondary: var(--secondary-colorblind);
+  --text-primary: var(--text-primary-colorblind);
+  --text-secondary: var(--text-secondary-colorblind);
+  --table-bg: var(--table-bg-colorblind);
+  --table-cell: var(--bg-colorblind);
+  --table-border: var(--table-border-colorblind);
+}
+
+[data-theme="dyslexic"] {
+  --bg: var(--bg-dyslexic);
+  --card: var(--card-dyslexic);
+  --primary: var(--primary-dyslexic);
+  --secondary: var(--secondary-dyslexic);
+  --text-primary: var(--text-primary-dyslexic);
+  --text-secondary: var(--text-secondary-dyslexic);
+  --table-bg: var(--table-bg-dyslexic);
+  --table-cell: var(--bg-dyslexic);
+  --table-border: var(--table-border-dyslexic);
+  --font-family: "OpenDyslexic", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --letter-spacing: 0.5px;
+  --line-height: 1.8;
 }
 
 /* Base styles */
@@ -91,6 +168,14 @@ html, body {
   word-spacing: var(--word-spacing);
   color: var(--text-dark);
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  letter-spacing: var(--letter-spacing);
+  line-height: var(--line-height);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -122,6 +207,14 @@ a {
 a:hover {
   color: var(--primary-dark);
   text-decoration: underline;
+}
+
+a {
+  color: var(--primary);
+}
+
+a:hover {
+  color: var(--secondary);
 }
 
 strong, b {
@@ -157,7 +250,11 @@ body {
 .navbar-brand {
   font-weight: 700;
   font-size: 1.5rem;
-  color: var(--text-light) !important;
+  color: var(--text-primary) !important;
+}
+
+.navbar-brand:hover {
+  color: var(--secondary) !important;
 }
 
 .navbar-dark .navbar-nav .nav-link {
@@ -185,6 +282,12 @@ body {
   margin-bottom: var(--spacing-lg);
   overflow: hidden;
   background-color: var(--background-light);
+}
+
+.card {
+  background-color: var(--card);
+  color: var(--text-primary);
+  border: 1px solid var(--text-secondary);
 }
 
 .card:hover {
@@ -220,9 +323,20 @@ body {
   color: var(--text-dark);
 }
 
+.form-control {
+  background-color: var(--card);
+  border: 1px solid var(--text-secondary);
+  color: var(--text-primary);
+}
+
 .form-control:focus {
   border-color: var(--primary-color);
   box-shadow: 0 0 0 0.2rem rgba(0, 86, 179, 0.25);
+}
+
+.form-control:focus {
+  border-color: var(--primary);
+  outline: none;
 }
 
 .form-group {
@@ -256,11 +370,20 @@ label {
   color: var(--text-light);
 }
 
+.btn-primary {
+  background-color: var(--primary);
+  color: #FFFFFF;
+}
+
 .btn-primary:hover {
   background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
   background-color: var(--primary-dark);
+}
+
+.btn-primary:hover {
+  background-color: var(--secondary);
 }
 
 .btn-light {
@@ -279,8 +402,37 @@ label {
 }
 
 .btn-success:hover {
-  background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--secondary-color) 100%);
+  background: linear-gradient(135deg, var (--secondary-dark) 0%, var(--secondary-color) 100%);
   transform: translateY(-2px);
+}
+
+button {
+  margin: var(--spacing-md) 0;
+  min-width: 8rem;
+}
+
+button {
+  font-family: var(--font-family);
+}
+
+button.primary {
+  background-color: var(--primary);
+  color: #FFFFFF;
+}
+
+button.primary:hover {
+  background-color: var(--secondary);
+}
+
+button.secondary {
+  background-color: var(--card);
+  color: var(--text-primary);
+  border: 1px solid var(--text-secondary);
+}
+
+button.secondary:hover {
+  background-color: var(--text-secondary);
+  color: var(--card);
 }
 
 #connectWalletBtn {
@@ -303,11 +455,6 @@ label {
   margin-left: auto;
 }
 
-button {
-  margin: var(--spacing-md) 0;
-  min-width: 8rem;
-}
-
 /* Tables */
 .table {
   width: 100%;
@@ -317,22 +464,32 @@ button {
 
 .table thead th {
   font-weight: 700;
-  color: var(--text-light);
+  color: var(--text-primary);
   border-bottom: 2px solid var(--primary-color);
   padding: var(--spacing-sm) var(--spacing-md);
   text-transform: uppercase;
   font-size: 0.9rem;
-  background-color: var(--primary-color);
+  background-color: var(--card);
 }
 
 .table tbody tr:nth-child(even) {
-  background-color: var(--gray-light);
+  background-color: var(--bg);
 }
 
 .table tbody td {
   padding: var(--spacing-sm) var(--spacing-md);
   vertical-align: middle;
   border-top: 1px solid var(--gray-medium);
+  color: var(--text-primary);
+}
+
+.table tbody tr:nth-child(odd) {
+  background-color: var(--card);
+}
+
+.table tbody tr:hover {
+  background-color: var(--secondary);
+  color: var(--text-light);
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
@@ -341,6 +498,23 @@ button {
 
 .table-hover tbody tr:hover {
   background-color: rgba(52, 152, 219, 0.1);
+}
+
+.table th {
+  background-color: var(--card);
+  color: var(--text-primary);
+}
+
+.table tr:nth-child(even) {
+  background-color: var(--bg);
+}
+
+.table tr:nth-child(odd) {
+  background-color: var(--card);
+}
+
+.table td, .table th {
+  border: 1px solid var(--text-secondary);
 }
 
 /* Alert */
@@ -676,7 +850,7 @@ html {
   display: flex;
   align-items: flex-end;
   gap: var(--spacing-sm);
-  padding: var(--spacing-md) 0;
+  padding: var (--spacing-md) 0;
   height: 200px;
   align-items: flex-end;
   gap: 10px;
@@ -689,7 +863,7 @@ html {
 .chart-bar {
   flex: 1;
   background: linear-gradient(to top, var(--primary-color), var(--primary-dark));
-  border-radius: var(--border-radius-sm) var(--border-radius-sm) 0 0;
+  border-radius: var(--border-radius-sm) var (--border-radius-sm) 0 0;
   position: relative;
   transition: height var(--transition-normal);
   min-width: 2rem;

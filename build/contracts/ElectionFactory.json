@@ -87,7 +87,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -131,7 +132,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -150,7 +152,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -169,7 +172,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -182,7 +186,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -258,7 +263,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -277,7 +283,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -321,7 +328,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -334,7 +342,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.8.0+commit.c7dfd78e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_voterRegistry\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"electionAddress\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"ElectionCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"electionAddress\",\"type\":\"address\"}],\"name\":\"ElectionDeactivated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"manager\",\"type\":\"address\"}],\"name\":\"ManagerAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"manager\",\"type\":\"address\"}],\"name\":\"ManagerRemoved\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_manager\",\"type\":\"address\"}],\"name\":\"addManager\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"admin\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"_description\",\"type\":\"string\"}],\"name\":\"createElection\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_electionAddress\",\"type\":\"address\"}],\"name\":\"deactivateElection\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"elections\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"electionAddress\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"description\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"creationTime\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"isActive\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getActiveElections\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getElectionCount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_index\",\"type\":\"uint256\"}],\"name\":\"getElectionInfo\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_electionAddress\",\"type\":\"address\"}],\"name\":\"isRegisteredElection\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"managers\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"registeredElections\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_manager\",\"type\":\"address\"}],\"name\":\"removeManager\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"voterRegistry\",\"outputs\":[{\"internalType\":\"contract VoterRegistry\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"Factory contract for creating and managing multiple elections\",\"kind\":\"dev\",\"methods\":{\"addManager(address)\":{\"details\":\"Add a manager who can create elections\",\"params\":{\"_manager\":\"Address of the manager to add\"}},\"constructor\":{\"details\":\"Initialize the factory with an admin and voter registry\",\"params\":{\"_voterRegistry\":\"Address of the deployed VoterRegistry contract\"}},\"createElection(string,string)\":{\"details\":\"Create a new election\",\"params\":{\"_description\":\"Description of the election\",\"_name\":\"Name of the election\"},\"returns\":{\"_0\":\"Address of the newly created election\"}},\"deactivateElection(address)\":{\"details\":\"Deactivate an election\",\"params\":{\"_electionAddress\":\"Address of the election to deactivate\"}},\"getActiveElections()\":{\"details\":\"Get active elections\",\"returns\":{\"_0\":\"Array of active election addresses\"}},\"getElectionCount()\":{\"details\":\"Get the count of all elections created\",\"returns\":{\"_0\":\"Number of elections\"}},\"getElectionInfo(uint256)\":{\"details\":\"Get election information by index\",\"params\":{\"_index\":\"Index of the election\"},\"returns\":{\"_0\":\"Election address, name, description, owner, creation time, and active status\"}},\"isRegisteredElection(address)\":{\"details\":\"Check if an address is a registered election\",\"params\":{\"_electionAddress\":\"Address to check\"},\"returns\":{\"_0\":\"Whether the address is a registered election\"}},\"removeManager(address)\":{\"details\":\"Remove a manager\",\"params\":{\"_manager\":\"Address of the manager to remove\"}}},\"title\":\"ElectionFactory\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/ElectionFactory.sol\":\"ElectionFactory\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/Election.sol\":{\"keccak256\":\"0x37d762ea328b124f6f84fa10e9fa37d508b07ae27cc28ebb5cf207429f1518b1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://cd3550f125eec92a496d3c3fe764cc1a233055d58542268845ad679d55b300fe\",\"dweb:/ipfs/QmYtnovonUTqgnssimXyLihLKFzzWTE69M96dRk69HthfC\"]},\"project:/contracts/ElectionFactory.sol\":{\"keccak256\":\"0x0d566fc3a9b5df57ea4010142a14256770830894a3d9eb5f5d67d249a216e277\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3b7f93dbc6d6690efe2ba704b3327dda92018b7d256d5d9ea6f3483047a451ba\",\"dweb:/ipfs/QmbKMBLXc1f5gqRLccw1we6FCBXfAWLmx2R2j4CkWoSjrT\"]},\"project:/contracts/VoterRegistry.sol\":{\"keccak256\":\"0x0cccce83a556630e68f7e104ad590ed4266c80a395e36088c2688c69f45e277a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e073f2cd1c5bfe2dd423c478a093324228a5d415611a47547db6c3b5c7e5ea0e\",\"dweb:/ipfs/QmfTZbgwjUxpE2gEU3gzTNbkidhbbEiym7tmMDABAmt5mV\"]}},\"version\":1}",
@@ -11090,12 +11099,13 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xbD29D8621dE7F5da2636b160b490B71074D763D7",
-      "transactionHash": "0xe40861884a2918a0c44b8dd613f91522eecb711e4e9614dd08992bd663d31b15"
+      "address": "0xFF90FE948686da77B95577C343143C77a3Cafb24",
+      "transactionHash": "0xf53e64f8b82b6432ff8963d83146d65c8e38f246d0bc1e2b44316f2e530e4871"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2025-05-14T18:29:38.059Z",
+  "updatedAt": "2025-05-16T10:06:36.867Z",
+  "networkType": "ethereum",
   "devdoc": {
     "details": "Factory contract for creating and managing multiple elections",
     "kind": "dev",

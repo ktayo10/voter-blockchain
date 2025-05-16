@@ -82,7 +82,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -95,7 +96,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -108,7 +110,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -127,7 +130,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -166,7 +170,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -255,7 +260,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -274,7 +280,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -303,7 +310,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.8.0+commit.c7dfd78e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"verifier\",\"type\":\"address\"}],\"name\":\"VerifierAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"verifier\",\"type\":\"address\"}],\"name\":\"VerifierRemoved\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"voter\",\"type\":\"address\"}],\"name\":\"VoterRegistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"voter\",\"type\":\"address\"}],\"name\":\"VoterRemoved\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"voter\",\"type\":\"address\"}],\"name\":\"VoterVerified\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_verifier\",\"type\":\"address\"}],\"name\":\"addVerifier\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"admin\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_voter\",\"type\":\"address\"}],\"name\":\"getVoterInfo\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_voter\",\"type\":\"address\"}],\"name\":\"isEligible\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_voter\",\"type\":\"address\"}],\"name\":\"isRegistered\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_fullName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"_idHash\",\"type\":\"string\"}],\"name\":\"registerVoter\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"registeredVoterCount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_verifier\",\"type\":\"address\"}],\"name\":\"removeVerifier\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_voter\",\"type\":\"address\"}],\"name\":\"removeVoter\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"verifiedVoterCount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"verifiers\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_voter\",\"type\":\"address\"}],\"name\":\"verifyVoter\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"voters\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isRegistered\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"isVerified\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"fullName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"idHash\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"registrationTime\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"Manages voter registration, identity verification, and eligibility \",\"kind\":\"dev\",\"methods\":{\"addVerifier(address)\":{\"details\":\"Add a verifier who can verify voters\",\"params\":{\"_verifier\":\"Address of the verifier\"}},\"constructor\":{\"details\":\"Initialize the registry with the admin\"},\"getVoterInfo(address)\":{\"details\":\"Get voter information\",\"params\":{\"_voter\":\"Address of the voter\"},\"returns\":{\"_0\":\"Whether the voter is registered, verified, and their registration time\"}},\"isEligible(address)\":{\"details\":\"Check if a voter is verified and eligible\",\"params\":{\"_voter\":\"Address of the voter to check\"},\"returns\":{\"_0\":\"Whether the voter is verified and eligible to vote\"}},\"isRegistered(address)\":{\"details\":\"Check if a voter is registered\",\"params\":{\"_voter\":\"Address of the voter to check\"},\"returns\":{\"_0\":\"Whether the voter is registered\"}},\"registerVoter(string,string)\":{\"details\":\"Register a new voter\",\"params\":{\"_fullName\":\"Full name of the voter\",\"_idHash\":\"Hash of the voter's identification document\"}},\"removeVerifier(address)\":{\"details\":\"Remove a verifier\",\"params\":{\"_verifier\":\"Address of the verifier to remove\"}},\"removeVoter(address)\":{\"details\":\"Remove a voter from the registry (admin only)\",\"params\":{\"_voter\":\"Address of the voter to remove\"}},\"verifyVoter(address)\":{\"details\":\"Verify a voter's identity (only authorized verifiers)\",\"params\":{\"_voter\":\"Address of the voter to verify\"}}},\"title\":\"VoterRegistry\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/VoterRegistry.sol\":\"VoterRegistry\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/VoterRegistry.sol\":{\"keccak256\":\"0x0cccce83a556630e68f7e104ad590ed4266c80a395e36088c2688c69f45e277a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e073f2cd1c5bfe2dd423c478a093324228a5d415611a47547db6c3b5c7e5ea0e\",\"dweb:/ipfs/QmfTZbgwjUxpE2gEU3gzTNbkidhbbEiym7tmMDABAmt5mV\"]}},\"version\":1}",
@@ -9596,12 +9604,13 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xdb2CA63F6b76643B1217cAf39F861c67737a07A6",
-      "transactionHash": "0x99bc46e6ed95e54f56631bdf0b2bd61b59b5b786ad01b6e8c1e757918132e7fb"
+      "address": "0x9ca676e79f1a636974d0C64446804Da0345F116a",
+      "transactionHash": "0xc2324f241773d2a184b11ef126a0e657a7b89dc3c7c37457b8db677cdcb14cd3"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2025-05-14T18:29:38.061Z",
+  "updatedAt": "2025-05-16T10:06:36.865Z",
+  "networkType": "ethereum",
   "devdoc": {
     "details": "Manages voter registration, identity verification, and eligibility ",
     "kind": "dev",

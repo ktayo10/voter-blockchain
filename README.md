@@ -1,4 +1,3 @@
-# DSCWOW-DVN
 Decentralised Voting application using Ethereum Network
 ### Abstract
 Building a secure electronic voting system that offers the fairness and privacy of current voting schemes, while providing the transparency and flexibility offered by electronic systems has been a challenge for a long time. In this work-in-progress project, we evaluate an application of blockchain as a service to implement distributed electronic voting systems. The paper proposes a novel electronic voting system based on blockchain that addresses some of the limitations in existing systems and evaluates some of the popular blockchain frameworks for the purpose of constructing a blockchain-based e-voting system. In particular, we evaluate the potential of distributed ledger technologies through the description of a case study; namely, the process of an election, and the implementation of a blockchain-based application, which improves the security and decreases the cost of hosting a nationwide election.
@@ -94,5 +93,32 @@ You must migrate the election smart contract each time your restart ganache.
 ### Step 6. Run the Front End Application
 `$ npm run dev`
 Visit this URL in your browser: http://localhost:3000
+
+## Known Vulnerabilities
+
+### Unresolved Issues
+The project has some unresolved vulnerabilities in its dependencies, as identified by `npm audit`. These include:
+
+1. **Axios**:
+   - Vulnerable to Cross-Site Request Forgery (CSRF) and Server-Side Request Forgery (SSRF).
+   - No fix is currently available.
+   - Affects dependencies: `localtunnel`, `browser-sync`.
+
+2. **Send**:
+   - Vulnerable to template injection that can lead to XSS.
+   - No fix is currently available.
+   - Affects dependencies: `serve-static`.
+
+### Steps Taken
+- Ran `npm audit fix` to resolve all fixable vulnerabilities.
+- Reviewed the remaining vulnerabilities and determined that they do not directly impact the functionality or security of this project, as it is not deployed in a live environment.
+
+### Mitigation
+- The project is intended for demonstration purposes and is not exposed to untrusted users or environments.
+- If deployed publicly, consider replacing affected dependencies with secure alternatives or monitoring for updates that address these vulnerabilities.
+
+### Security Awareness
+- These vulnerabilities have been documented to demonstrate awareness of potential security issues.
+- Future updates to the project should include re-running `npm audit` to check for fixes or alternative solutions.
 
 If you get stuck, want to collaborate or found a bug, please raise an issue.

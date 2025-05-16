@@ -94,6 +94,16 @@
               </div>
             </div>
             
+            <!-- Vote Distribution Graph -->
+            <div class="card mb-4">
+              <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Vote Distribution Graph</h5>
+              </div>
+              <div class="card-body">
+                <canvas id="voteDistributionChart" width="400" height="200"></canvas>
+              </div>
+            </div>
+            
             <!-- Voting Card -->
             <div id="votingActions" class="card mb-4" style="display: none;">
               <div class="card-header bg-primary text-white">
@@ -123,11 +133,20 @@
       <p>&copy; 2025 Blockchain Voting System | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
     </footer>
 
+    <!-- Theme Toggle Buttons -->
+    <div class="theme-buttons">
+      <button id="themeStandard" class="theme-btn" title="Standard Mode">S</button>
+      <button id="themeDark" class="theme-btn" title="Dark Mode">D</button>
+      <button id="themeColorBlind" class="theme-btn" title="Color Blind-Friendly Mode">CB</button>
+      <button id="themeDyslexic" class="theme-btn" title="Dyslexia-Friendly Mode">DF</button>
+    </div>
+
     <!-- JavaScripts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/web3.min.js"></script>
     <script src="js/truffle-contract.js"></script>
     <script src="js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js Library -->
   </body>
 </html>
